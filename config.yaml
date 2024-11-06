@@ -1,14 +1,7 @@
-  env: development
-port: 7777
+env: development
+port: 8091
 mysql:
   dbhost: localhost:3306
-  dbuser: root
+  dbuser: 
   dbpass: 
-  dbname: rest-api
-jwt:
-  signing_key: mysecretkey
-  exp: 24h
-redis:
-  host: localhost:6379
-  pass: 
-  db: 0
+  dbname: 

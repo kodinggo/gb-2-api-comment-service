@@ -3,6 +3,7 @@ package console
 import (
 	"net/http"
 
+	"github.com/kodinggo/gb-2-api-story-service/internal/config"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +18,7 @@ var serverCmd = &cobra.Command{
 			return c.String(http.StatusOK, "pong!")
 		})
 
-		e.Start(":8091")
+		e.Start(":"+config.Port())
 	},
 }
 
