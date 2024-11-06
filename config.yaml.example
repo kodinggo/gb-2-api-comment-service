@@ -1,7 +1,7 @@
-  env: 
-port: 
+  env: development
+port: 8291
 mysql:
-  dbhost: 
-  dbuser: 
-  dbpass: 
-  dbname: 
+  dbhost: localhost:3380
+  dbuser: slebew
+  dbpass: 911
+  dbname: gilanggolang

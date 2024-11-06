@@ -1,7 +1,0 @@
-env: development
-port: 8091
-mysql:
-  dbhost: localhost:3306
-  dbuser: 
-  dbpass: 
-  dbname: 
