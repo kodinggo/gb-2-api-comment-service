@@ -2,6 +2,6 @@
 port: 8291
 mysql:
   dbhost: localhost:3380
-  dbuser: slebew
-  dbpass: 911
-  dbname: gilanggolang
+  dbuser: root
+  dbpass: pass
+  dbname: root
