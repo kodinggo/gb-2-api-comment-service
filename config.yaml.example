@@ -1,0 +1,7 @@
+env: development
+port: 8291
+mysql:
+  dbhost: localhost:3380
+  dbuser: root
+  dbpass: root
+  dbname: comment
