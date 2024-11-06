@@ -1,2 +1,2 @@
 # ignore ALL .config files
-*.yaml
+config.yaml
