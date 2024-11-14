@@ -6,15 +6,17 @@ import (
 	"github.com/kodinggo/gb-2-api-story-service/internal/model"
 )
 
-
-type commentUseCase struct{
-	commentRepository model.CommentsRepository
+type commentUseCase struct {
+	commentRepository model.CommentRepository
 }
 
-func InitCommentUsecase(commentRepository model.CommentsRepository)model.CommentsRepository{
+func InitCommentUsecase(commentRepository model.CommentRepository) model.CommentRepository {
 	return &commentUseCase{commentRepository: commentRepository}
 }
 
-func (u *commentUseCase) Create(ctx context.Context, user_id int64 , story_id int64,comment string) (newComment model.Comment, err error) {
-	return u.commentRepository.Create(ctx, user_id,story_id,comment)
+func (u *commentUseCase) Create(ctx context.Context, data *model.Comment) (newComment model.Comment, err error) {
+	return u.commentRepository.Create(ctx, data)
+}
+func (u *commentUseCase) Update(ctx context.Context ,data *[]model.Comment)(model.Comment,error){
+	panic("Implement me!")
 }

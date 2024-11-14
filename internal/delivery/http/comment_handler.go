@@ -16,24 +16,41 @@ func InitCommentHandler(commentUseCase model.CommentUseCase) CommentHandler {
 
 }
 
-func (h CommentHandler)RegisterRoute(e *echo.Echo){
+func (h CommentHandler) RegisterRoute(e *echo.Echo) {
 	g := e.Group("/comment")
-	g.POST("",h.Create)
+	
+	g.PUT("",h.Update)
+	g.POST("", h.Create)
 }
 
 func (h CommentHandler) Create(c echo.Context) error {
 	var body model.Comment
-	err :=c.Bind(&body)
-	if err !=nil{
-		return echo.NewHTTPError(http.StatusBadRequest,err.Error())
-	}
-	comment,err :=  h.commentUsecase.Create(c.Request().Context(),body.User_id,body.Story_id,body.Comment)
+	err := c.Bind(&body)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError,err.Error())
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
-	response :=Response{
+	comment, err := h.commentUsecase.Create(c.Request().Context(), &model.Comment{UserId: body.UserId ,StoryId:body.StoryId,Comment: body.Comment})
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	response := Response{
 		Data: comment,
 	}
-	return c.JSON(http.StatusAccepted,response)
+	return c.JSON(http.StatusAccepted, response)
 }
 
+func (h CommentHandler) Update (c echo.Context) error{
+		var body *[]model.Comment
+		err := c.Bind(body)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest,err)
+		}
+		comment,err := h.commentUsecase.Update(c.Request().Context(),body)
+		if err != nil{
+			return echo.NewHTTPError(http.StatusInternalServerError,err.Error())
+		}
+		response := Response{
+			Data: comment,
+		}
+		return c.JSON( http.StatusOK,response)
+}

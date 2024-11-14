@@ -1,0 +1,15 @@
+syntax="proto3";  //versi proto yang digunakan
+package pb.comment_service;   ///mengemlompokan protobuf berdasarkan domain tertentu
+option go_package="pb/comment_service";
+
+// import "google/protobuf/timestamp.proto";
+
+message Comment{    
+    int64 id = 1;
+    string comment = 2;
+    string story_id  = 3;
+    string user_id = 4;
+    // google.protobuf.Timestamp created_at =5;
+    // google.protobuf.Timestamp updated_at =6;
+}
+    

@@ -32,11 +32,9 @@ var migrationCmd = &cobra.Command{
 		if err := dbConn.Ping(); err != nil {
 			panic(err)
 		}
-
 		if len(args) > 0 {
 			direction = args[0]
 		}
-
 		switch direction {
 		case "up", "down":
 		default:
@@ -44,7 +42,7 @@ var migrationCmd = &cobra.Command{
 		}
 
 		migrations := &migrate.FileMigrationSource{Dir: "./db/migrations"}
-		var n int // "n" berapa migration yg di-applied
+		var n int 
 		if direction == "down" {
 			n, err = migrate.ExecMax(dbConn, "mysql", migrations, migrate.Down, step)
 		} else {
