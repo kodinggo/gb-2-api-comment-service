@@ -7,9 +7,11 @@ import (
 
 type CommentRepository interface {
 	Create(ctx context.Context, data *Comment) (Comment, error)
+	Update(ctx context.Context, id int64, data *Comment) (*Comment, error)
 }
 type CommentUseCase interface {
 	Create(ctx context.Context, data *Comment) (Comment, error)
+	Update(ctx context.Context, id int64, data *Comment) (*Comment, error)
 }
 type Comment struct {
 	ID         int64      `json:"id"`
