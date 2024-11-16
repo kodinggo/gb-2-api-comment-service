@@ -1,3 +1,4 @@
 # ignore ALL .config files
 config.yaml
 dbconfig.yaml
+note.txt

@@ -27,7 +27,7 @@ func (h CommentHandler) Create(c echo.Context) error {
 	if err !=nil{
 		return echo.NewHTTPError(http.StatusBadRequest,err.Error())
 	}
-	comment,err :=  h.commentUsecase.Create(c.Request().Context(),body.User_id,body.Story_id,body.Comment)
+	comment,err :=  h.commentUsecase.Create(c.Request().Context(),&body)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError,err.Error())
 	}
