@@ -13,7 +13,6 @@ type commentUseCase struct {
 func InitCommentUsecase(commentRepository model.CommentRepository) model.CommentRepository {
 	return &commentUseCase{commentRepository: commentRepository}
 }
-
 func (u *commentUseCase) Create(ctx context.Context, data *model.Comment) (newComment model.Comment, err error) {
 	return u.commentRepository.Create(ctx, &model.Comment{Comment: data.Comment, StoryID: data.StoryID, UserID: data.UserID})
 }
