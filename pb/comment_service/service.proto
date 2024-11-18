@@ -1,8 +1,11 @@
 syntax="proto3";  //versi proto yang digunakan
 package pb.comment_service;   ///mengemlompokan protobuf berdasarkan domain tertentu
-option go_package="pb/comment_service";
+option go_package="pb.comment_service";
 
 // import "google/protobuf/timestamp.proto";
+service CommentService{
+    
+}
 
 message Comment{    
     int64 id = 1;
