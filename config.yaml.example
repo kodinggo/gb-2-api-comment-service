@@ -1,7 +1,16 @@
+<<<<<<< HEAD
+  env: development
+=======
 env: development
+>>>>>>> 3669e1a272a01c8fb36baf93e7957cb1c2bc35f1
 port: 8291
 mysql:
   dbhost: localhost:3380
   dbuser: root
+<<<<<<< HEAD
+  dbpass: pass
+  dbname: root
+=======
   dbpass: root
   dbname: comment
+>>>>>>> 3669e1a272a01c8fb36baf93e7957cb1c2bc35f1
