@@ -9,17 +9,19 @@ type CommentRepository interface {
 	Create(ctx context.Context, data *Comment) (Comment, error)
 	Update(ctx context.Context, id int64, data *Comment) (*Comment, error)
 	FindById(ctx context.Context, id int64) (*Comment, error)
+	Delete(ctx context.Context,id int64) error
 }
 type CommentUseCase interface {
 	Create(ctx context.Context, data *Comment) (Comment, error)
 	Update(ctx context.Context, id int64, data *Comment) (*Comment, error)
 	FindById(ctx context.Context, id int64) (*Comment, error)
+	Delete(ctx context.Context,id int64) error
 }
 type Comment struct {
 	ID         int64      `json:"id"`
-	Comment    string     `json:"comment"`
-	StoryID    int64      `json:"story_id"`
-	UserID     int64      `json:"user_id"`
+	Comment    string     `json:"comment" validate:"required"`
+	StoryID    int64      `json:"story_id" validate:"required"`
+	UserID     int64      `json:"user_id" validate:"required"`
 	Author     Author     `json:"-"`
 	Story      Story      `json:"-"`
 	Created_at time.Time  `json:"created_at"`

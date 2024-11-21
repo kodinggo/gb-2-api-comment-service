@@ -6,7 +6,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/kodinggo/gb-2-api-story-service/internal/config"
+	"github.com/kodinggo/gb-2-api-comment-service/internal/config"
 )
 
 func NewConnStr() string {
