@@ -19,10 +19,9 @@ func InitCommentHandler(commentUseCase model.CommentUseCase) CommentHandler {
 
 }
 
-var validate *validator.Validate
-
+var validate = validator.New()
 func (h CommentHandler) RegisterRoute(e *echo.Echo) {
-	g := e.Group("/comment")
+	g := e.Group("/v1/comment")
 	g.POST("", h.Create)
 	g.PUT("/:id", h.Update)
 	g.DELETE("/:id", h.Delete)
@@ -47,7 +46,7 @@ func (h *CommentHandler) Create(c echo.Context) error {
 func (h *CommentHandler) Update(c echo.Context) error {
 	var data model.Comment
 	id := c.Param("id")
-	validate = validator.New()
+
 	err := c.Bind(&data)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -86,5 +85,4 @@ func (h *CommentHandler) Delete(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
-	return c.JSON(http.StatusAccepted, fmt.Sprintf("sucessfully deleted comment id : %v", idInt))
-}
+	return c.JSON(http.StatusNoContent, nil)}
