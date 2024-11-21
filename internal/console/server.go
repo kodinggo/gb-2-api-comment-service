@@ -3,11 +3,11 @@ package console
 import (
 	"net/http"
 
-	"github.com/kodinggo/gb-2-api-story-service/internal/config"
-	mysqldb "github.com/kodinggo/gb-2-api-story-service/internal/db/mysql"
-	httphandler "github.com/kodinggo/gb-2-api-story-service/internal/delivery/http"
-	"github.com/kodinggo/gb-2-api-story-service/internal/repository"
-	"github.com/kodinggo/gb-2-api-story-service/internal/usecase"
+	"github.com/kodinggo/gb-2-api-comment-service/internal/config"
+	mysqldb "github.com/kodinggo/gb-2-api-comment-service/internal/db/mysql"
+	httphandler "github.com/kodinggo/gb-2-api-comment-service/internal/delivery/http"
+	"github.com/kodinggo/gb-2-api-comment-service/internal/repository"
+	"github.com/kodinggo/gb-2-api-comment-service/internal/usecase"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/cobra"
 )
@@ -18,6 +18,7 @@ var serverCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		e := echo.New()
 		dbConn := mysqldb.InitDBConn()
+
 		commentRepository := repository.InitCommentRepository(dbConn)
 		commentUseCase := usecase.InitCommentUsecase(commentRepository)
 		commentHandler := httphandler.InitCommentHandler(commentUseCase)
@@ -30,5 +31,6 @@ var serverCmd = &cobra.Command{
 }
 
 func init() {
+
 	rootCmd.AddCommand(serverCmd)
 }

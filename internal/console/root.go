@@ -3,7 +3,7 @@ package console
 import (
 	"log"
 
-	"github.com/kodinggo/gb-2-api-story-service/internal/config"
+	"github.com/kodinggo/gb-2-api-comment-service/internal/config"
 	"github.com/spf13/cobra"
 )
 

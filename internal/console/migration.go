@@ -6,7 +6,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	dbmysql "github.com/kodinggo/gb-2-api-story-service/internal/db/mysql"
+	dbmysql "github.com/kodinggo/gb-2-api-comment-service/internal/db/mysql"
 	migrate "github.com/rubenv/sql-migrate"
 	"github.com/spf13/cobra"
 )
