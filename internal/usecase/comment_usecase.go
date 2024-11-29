@@ -14,14 +14,16 @@ type commentUseCase struct {
 func InitCommentUsecase(commentRepository model.CommentRepository) model.CommentRepository {
 	return &commentUseCase{commentRepository: commentRepository}
 }
+
 func (u *commentUseCase) Create(ctx context.Context, data *model.Comment) (newComment model.Comment, err error) {
 	return u.commentRepository.Create(ctx, data)
 }
+
 func (u *commentUseCase) FindById(ctx context.Context, id int64) (*model.Comment, error) {
 	return u.commentRepository.FindById(ctx, id)
 }
-func (u *commentUseCase) Update(ctx context.Context, id int64, data *model.Comment) (*model.Comment, error) {
 
+func (u *commentUseCase) Update(ctx context.Context, id int64, data *model.Comment) (*model.Comment, error) {
 	existingComment, err := u.FindById(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find comment with id %d: %w", id, err)
@@ -40,6 +42,7 @@ func (u *commentUseCase) Update(ctx context.Context, id int64, data *model.Comme
 	}
 	return commentUpdate, nil
 }
+
 func (u *commentUseCase) Delete(ctx context.Context, id int64) error {
-	return u.commentRepository.Delete(ctx,id)
+	return u.commentRepository.Delete(ctx, id)
 }

@@ -34,10 +34,11 @@ func (s *commentRepository) Create(ctx context.Context, data *model.Comment) (ne
 		return model.Comment{}, err
 	}
 	lastInsertId, _ := results.LastInsertId()
-	newComment = model.Comment{ID: lastInsertId, UserID: data.UserID, StoryID: data.StoryID, Comment: data.Comment, Created_at: timeNow}
+	newComment = model.Comment{ID: lastInsertId, UserID: data.UserID, StoryID: data.StoryID, Comment: data.Comment, CreatedAt: timeNow}
 	return
 
 }
+
 func (s *commentRepository) Delete(ctx context.Context, id int64) error {
 	query, args, err := sq.Delete("*").From("comments").Where(sq.Eq{"id": id}).ToSql()
 
@@ -49,6 +50,7 @@ func (s *commentRepository) Delete(ctx context.Context, id int64) error {
 	return err
 
 }
+
 func (s *commentRepository) FindById(ctx context.Context, id int64) (*model.Comment, error) {
 	Query, args, err := sq.Select("*").From("comments").Where(sq.Eq{"id": id}).ToSql()
 	if err != nil {
@@ -63,18 +65,17 @@ func (s *commentRepository) FindById(ctx context.Context, id int64) (*model.Comm
 	comment := &model.Comment{}
 
 	if row.Next() {
-
-		err = row.Scan(&comment.ID, &comment.Comment, &comment.UserID, &comment.StoryID, &comment.Created_at, &comment.Updated_at)
+		err = row.Scan(&comment.ID, &comment.Comment, &comment.UserID, &comment.StoryID, &comment.CreatedAt, &comment.UpdatedAt)
 		if err != nil {
 			if err == sql.ErrNoRows {
 				return nil, nil
 			}
 			return nil, err
 		}
-
 	}
 	return comment, nil
 }
+
 func (s *commentRepository) Update(ctx context.Context, id int64, data *model.Comment) (*model.Comment, error) {
 	query, args, err := sq.Update("comments").Set("comment", data.Comment).Set("user_id", data.UserID).Set("story_id", data.StoryID).Set("updated_at", time.Now().UTC()).Where(sq.Eq{"id": id}).ToSql()
 	if err != nil {
