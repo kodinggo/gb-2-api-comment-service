@@ -88,5 +88,6 @@ func (h *CommentHandler) Delete(c echo.Context) error {
 	response := Response{
 		Status: "success",
 	}
+
 	return c.JSON(http.StatusOK, response)
 }
