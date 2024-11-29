@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"fmt"
-
 	"github.com/kodinggo/gb-2-api-comment-service/internal/model"
 )
 
@@ -42,4 +41,15 @@ func (u *commentUseCase) Update(ctx context.Context, id int64, data *model.Comme
 }
 func (u *commentUseCase) Delete(ctx context.Context, id int64) error {
 	return u.commentRepository.Delete(ctx,id)
+}
+
+func (u *commentUseCase)FindByStoryId(ctx context.Context,id int64) ([]*model.Comment,error){
+	if id == 0 {
+		return nil, fmt.Errorf("story_id cannot be zero")
+	}
+	comments, err := u.commentRepository.FindByStoryId(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch comments: %w", err)
+	}
+	return comments,nil
 }

@@ -85,4 +85,5 @@ func (h *CommentHandler) Delete(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
-	return c.JSON(http.StatusNoContent, nil)}
+	return c.JSON(http.StatusNoContent, nil)
+}

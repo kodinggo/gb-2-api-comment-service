@@ -1,0 +1,26 @@
+syntax = "proto3";
+package pb.comment_service;
+option go_package="pb/comment_service";
+import "google/protobuf/timestamp.proto";
+
+message Comment {
+    int64 id = 1;
+    string comment = 2;
+    Author auhor =3;
+    google.protobuf.Timestamp created_at = 7;
+    google.protobuf.Timestamp updated_at = 8; 
+}
+
+message Author {
+    int64 id = 1;
+    string fullname = 2;
+    string sort_bio = 3;
+    string gender = 4;
+    string picture_url = 5;
+    string username = 6;
+    string email = 7;
+}
+
+message Comments{
+    repeated Comment comments =1;
+}
