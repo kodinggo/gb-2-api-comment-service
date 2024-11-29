@@ -1,4 +1,4 @@
 development:
   dialect: mysql
-  datasource: your.db
+  datasource: .
   dir: db/migration

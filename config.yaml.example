@@ -1,7 +1,7 @@
-  env: development
-port: 8291
+env: development
+port: 8001
 mysql:
-  dbhost: localhost:3380
+  dbhost: localhost:3306
   dbuser: root
-  dbpass: pass
-  dbname: root
+  dbpass: root
+  dbname: comment_db

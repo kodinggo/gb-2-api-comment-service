@@ -17,6 +17,7 @@ type CommentgRPCHandler struct {
 func InitgRPCHanlder(commentUsecase model.CommentUseCase) pb.CommentServiceServer {
 	return &CommentgRPCHandler{commentUsecase: commentUsecase}
 }
+
 func (h *CommentgRPCHandler) FindAllByStoryID(ctx context.Context, req *pb.FindAllByStoryIDRequest) (*pb.Comments, error) {
 	if req.StoryId < 1 {
 		return nil, fmt.Errorf("story id can't below one")
@@ -32,14 +33,15 @@ func (h *CommentgRPCHandler) FindAllByStoryID(ctx context.Context, req *pb.FindA
 	}
 	return &response, nil
 }
+
 func ConvertModeltoProto(data []*model.Comment) []*pb.Comment {
 	var protoComments []*pb.Comment
 	for _, comment := range data {
 		protoComments = append(protoComments, &pb.Comment{
 			Id:        comment.ID,
 			Comment:   comment.Comment,
-			CreatedAt: timestamppb.New(comment.Created_at),
-			UpdatedAt: timestamppb.New(*comment.Updated_at),
+			CreatedAt: timestamppb.New(comment.CreatedAt),
+			UpdatedAt: timestamppb.New(*comment.UpdatedAt),
 		})
 	}
 
