@@ -54,6 +54,17 @@ func (u *commentUseCase)FindByStoryId(ctx context.Context,id int64) ([]*model.Co
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch comments: %w", err)
 	}
+
+	// TODO: Resolve comments[n].Author
+	/*
+		comments = [
+  			{
+     				id: 1
+     				author: { id: 1, fullname: bambang }
+	 		}
+		]
+ 	*/
+	
 	return comments,nil
 }
 func (u *commentUseCase)FindByStoryIds(ctx context.Context,ids []int64) ([]*model.Comment,error){
