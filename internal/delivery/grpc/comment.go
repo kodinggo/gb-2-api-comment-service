@@ -34,6 +34,17 @@ func (h *CommentgRPCHandler) FindAllByStoryID(ctx context.Context, req *pb.FindA
 	return &response, nil
 }
 
+func (h *CommentgRPCHandler) FindAllByStoryIDs(ctx context.Context, req *pb.FindAllByStoryIDsRequest) (*pb.Comments, error) {
+	comments, err := h.commentUsecase.FindByStoryIds(ctx, req.StoryId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get data %w", err)
+	}
+	data := ConvertModeltoProto(comments)
+	response := pb.Comments{
+		Comments: data,
+	}
+	return &response, nil
+}
 func ConvertModeltoProto(data []*model.Comment) []*pb.Comment {
 	var protoComments []*pb.Comment
 	for _, comment := range data {

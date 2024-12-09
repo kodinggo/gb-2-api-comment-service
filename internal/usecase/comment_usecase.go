@@ -56,3 +56,13 @@ func (u *commentUseCase)FindByStoryId(ctx context.Context,id int64) ([]*model.Co
 	}
 	return comments,nil
 }
+func (u *commentUseCase)FindByStoryIds(ctx context.Context,ids []int64) ([]*model.Comment,error){
+	if len(ids) == 0 {
+		return nil, fmt.Errorf("story_id cannot be zero")
+	}
+	comments, err := u.commentRepository.FindByStoryIds(ctx, ids)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch comments: %w", err)
+	}
+	return comments,nil
+}

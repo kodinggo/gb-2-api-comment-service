@@ -11,6 +11,7 @@ type CommentRepository interface {
 	FindById(ctx context.Context, id int64) (*Comment, error)
 	Delete(ctx context.Context, id int64) error
 	FindByStoryId(ctx context.Context, id int64) ([]*Comment, error)
+	FindByStoryIds(ctx context.Context,id []int64)([]*Comment,error)
 }
 
 type CommentUseCase interface {
@@ -19,6 +20,7 @@ type CommentUseCase interface {
 	FindById(ctx context.Context, id int64) (*Comment, error)
 	Delete(ctx context.Context, id int64) error
 	FindByStoryId(ctx context.Context, id int64) ([]*Comment, error)
+	FindByStoryIds(ctx context.Context,id []int64)([]*Comment,error)
 }
 
 type Comment struct {

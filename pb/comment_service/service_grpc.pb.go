@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CommentService_FindAllByStoryID_FullMethodName = "/pb.comment_service.CommentService/FindAllByStoryID"
+	CommentService_FindAllByStoryID_FullMethodName  = "/pb.comment_service.CommentService/FindAllByStoryID"
+	CommentService_FindAllByStoryIDs_FullMethodName = "/pb.comment_service.CommentService/FindAllByStoryIDs"
 )
 
 // CommentServiceClient is the client API for CommentService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CommentServiceClient interface {
 	FindAllByStoryID(ctx context.Context, in *FindAllByStoryIDRequest, opts ...grpc.CallOption) (*Comments, error)
+	FindAllByStoryIDs(ctx context.Context, in *FindAllByStoryIDsRequest, opts ...grpc.CallOption) (*Comments, error)
 }
 
 type commentServiceClient struct {
@@ -47,11 +49,22 @@ func (c *commentServiceClient) FindAllByStoryID(ctx context.Context, in *FindAll
 	return out, nil
 }
 
+func (c *commentServiceClient) FindAllByStoryIDs(ctx context.Context, in *FindAllByStoryIDsRequest, opts ...grpc.CallOption) (*Comments, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Comments)
+	err := c.cc.Invoke(ctx, CommentService_FindAllByStoryIDs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CommentServiceServer is the server API for CommentService service.
 // All implementations must embed UnimplementedCommentServiceServer
 // for forward compatibility.
 type CommentServiceServer interface {
 	FindAllByStoryID(context.Context, *FindAllByStoryIDRequest) (*Comments, error)
+	FindAllByStoryIDs(context.Context, *FindAllByStoryIDsRequest) (*Comments, error)
 	mustEmbedUnimplementedCommentServiceServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedCommentServiceServer struct{}
 
 func (UnimplementedCommentServiceServer) FindAllByStoryID(context.Context, *FindAllByStoryIDRequest) (*Comments, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindAllByStoryID not implemented")
+}
+func (UnimplementedCommentServiceServer) FindAllByStoryIDs(context.Context, *FindAllByStoryIDsRequest) (*Comments, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindAllByStoryIDs not implemented")
 }
 func (UnimplementedCommentServiceServer) mustEmbedUnimplementedCommentServiceServer() {}
 func (UnimplementedCommentServiceServer) testEmbeddedByValue()                        {}
@@ -104,6 +120,24 @@ func _CommentService_FindAllByStoryID_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CommentService_FindAllByStoryIDs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindAllByStoryIDsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommentServiceServer).FindAllByStoryIDs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CommentService_FindAllByStoryIDs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommentServiceServer).FindAllByStoryIDs(ctx, req.(*FindAllByStoryIDsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CommentService_ServiceDesc is the grpc.ServiceDesc for CommentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var CommentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindAllByStoryID",
 			Handler:    _CommentService_FindAllByStoryID_Handler,
+		},
+		{
+			MethodName: "FindAllByStoryIDs",
+			Handler:    _CommentService_FindAllByStoryIDs_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

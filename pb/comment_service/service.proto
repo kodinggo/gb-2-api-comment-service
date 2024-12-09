@@ -5,6 +5,10 @@ import "pb/comment_service/comment.proto";
 message FindAllByStoryIDRequest{
     int64 story_id =1;
 }
+message  FindAllByStoryIDsRequest{
+    repeated int64 story_id =1;
+}
 service CommentService{
     rpc FindAllByStoryID(FindAllByStoryIDRequest) returns (Comments);
+    rpc FindAllByStoryIDs(FindAllByStoryIDsRequest) returns (Comments);
 }
