@@ -26,7 +26,7 @@ type Comment struct {
 	Comment   string     `json:"comment" validate:"required"`
 	StoryID   int64      `json:"story_id,omitempty" validate:"required" `
 	UserID    int64      `json:"user_id,omitempty" validate:"required" `
-	Author    Author     `json:"-"`
+	Author    Author     `json:"author"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at"`
 }

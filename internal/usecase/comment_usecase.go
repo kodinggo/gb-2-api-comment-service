@@ -3,15 +3,24 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"log"
+
+	pb "github.com/kodinggo/gb-2-api-account-service/pb/account"
 	"github.com/kodinggo/gb-2-api-comment-service/internal/model"
 )
 
 type commentUseCase struct {
-	commentRepository model.CommentRepository
+	commentRepository    model.CommentRepository
+	accountServiceClient pb.AccountServiceClient
 }
 
-func InitCommentUsecase(commentRepository model.CommentRepository) model.CommentRepository {
-	return &commentUseCase{commentRepository: commentRepository}
+func InitCommentUsecase(
+	commentRepository model.CommentRepository,
+	accountService pb.AccountServiceClient,
+) model.CommentRepository {
+	return &commentUseCase{
+		commentRepository:    commentRepository,
+		accountServiceClient: accountService}
 }
 
 func (u *commentUseCase) Create(ctx context.Context, data *model.Comment) (newComment model.Comment, err error) {
@@ -46,24 +55,30 @@ func (u *commentUseCase) Delete(ctx context.Context, id int64) error {
 	return u.commentRepository.Delete(ctx, id)
 }
 
-func (u *commentUseCase)FindByStoryId(ctx context.Context,id int64) ([]*model.Comment,error){
-	if id == 0 {
-		return nil, fmt.Errorf("story_id cannot be zero")
-	}
+func (u *commentUseCase) FindByStoryId(ctx context.Context, id int64) ([]*model.Comment, error) {
 	comments, err := u.commentRepository.FindByStoryId(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch comments: %w", err)
 	}
 
-	// TODO: Resolve comments[n].Author
-	/*
-		comments = [
-  			{
-     				id: 1
-     				author: { id: 1, fullname: bambang }
-	 		}
-		]
- 	*/
-	
-	return comments,nil
+	for idx, comment := range comments {
+		resp, err := u.accountServiceClient.FindByID(ctx, &pb.FindByIDRequest{Id: comment.UserID})
+		if err != nil {
+			log.Printf("failed to fetch author for comment ID %d: %s", comment.ID, err)
+			return nil, err
+		}
+
+		comments[idx].Author = model.Author{
+			ID:         resp.Id,
+			Fullname:   resp.Fullname,
+			SortBio:    resp.SortBio,
+			Gender:     resp.Gender.String(),
+			PictureURL: resp.PictureUrl,
+			Username:   resp.Username,
+			Email:      resp.Email,
+		}
+
+	}
+
+	return comments, nil
 }
