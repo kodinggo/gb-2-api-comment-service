@@ -51,7 +51,7 @@ func ConvertModeltoProto(data []*model.Comment) []*pb.Comment {
 		protoComments = append(protoComments, &pb.Comment{
 			Id:        comment.ID,
 			Comment:   comment.Comment,
-			StoryId: comment.StoryID,
+			StoryId:   comment.StoryID,
 			CreatedAt: timestamppb.New(comment.CreatedAt),
 			UpdatedAt: timestamppb.New(*comment.UpdatedAt),
 		})
