@@ -1,4 +1,0 @@
-development:
-  dialect: mysql
-  datasource: .
-  dir: db/migration
