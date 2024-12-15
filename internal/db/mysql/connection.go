@@ -3,6 +3,7 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -18,6 +19,7 @@ func NewConnStr() string {
 }
 
 func InitDBConn() *sql.DB {
+	log.Print(NewConnStr())
 	dbConn, err := sql.Open("mysql", NewConnStr())
 	if err != nil {
 		panic(err)
