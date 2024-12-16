@@ -45,15 +45,24 @@ func (h *CommentgRPCHandler) FindAllByStoryIDs(ctx context.Context, req *pb.Find
 	}
 	return &response, nil
 }
+
 func ConvertModeltoProto(data []*model.Comment) []*pb.Comment {
 	var protoComments []*pb.Comment
 	for _, comment := range data {
 		protoComments = append(protoComments, &pb.Comment{
 
-			Id:        comment.ID,
-			Comment:   comment.Comment,
-			StoryId:   comment.StoryID,
-
+			Id:      comment.ID,
+			Comment: comment.Comment,
+			StoryId: comment.StoryID,
+			Author: &pb.Author{
+				Id:         comment.Author.ID,
+				Fullname:   comment.Author.Fullname,
+				SortBio:    comment.Author.SortBio,
+				Gender:     comment.Author.Gender,
+				PictureUrl: comment.Author.PictureURL,
+				Username:   comment.Author.Username,
+				Email:      comment.Author.Email,
+			},
 			CreatedAt: timestamppb.New(comment.CreatedAt),
 			UpdatedAt: timestamppb.New(*comment.UpdatedAt),
 		})

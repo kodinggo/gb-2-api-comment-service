@@ -61,35 +61,80 @@ func (u *commentUseCase) FindByStoryId(ctx context.Context, id int64) ([]*model.
 		return nil, fmt.Errorf("failed to fetch comments: %w", err)
 	}
 
-	for idx, comment := range comments {
-		resp, err := u.accountServiceClient.FindByID(ctx, &pb.FindByIDRequest{Id: comment.UserID})
-		if err != nil {
-			log.Printf("failed to fetch author for comment ID %d: %s", comment.ID, err)
-			return nil, err
-		}
+	if len(comments) == 0 {
+		log.Printf("No comments found for story ID %d", id)
+		return nil, fmt.Errorf("no comments found for story ID %d", id)
+	}
 
-		comments[idx].Author = model.Author{
-			ID:         resp.Id,
-			Fullname:   resp.Fullname,
-			SortBio:    resp.SortBio,
-			Gender:     resp.Gender.String(),
-			PictureURL: resp.PictureUrl,
-			Username:   resp.Username,
-			Email:      resp.Email,
-		}
+	userID := comments[0].UserID
 
+	resp, err := u.accountServiceClient.FindByID(ctx, &pb.FindByIDRequest{Id: userID})
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch author: %w", err)
+	}
+
+	if resp == nil {
+		log.Println("FindByID response is nil")
+		return nil, fmt.Errorf("failed to fetch author for user ID %d", userID)
+	}
+
+	author := model.Author{
+		ID:         resp.Id,
+		Fullname:   resp.Fullname,
+		SortBio:    resp.SortBio,
+		Gender:     resp.Gender.String(),
+		PictureURL: resp.PictureUrl,
+		Username:   resp.Username,
+		Email:      resp.Email,
+	}
+
+	for idx := range comments {
+		comments[idx].Author = author
 	}
 
 	return comments, nil
-
 }
-func (u *commentUseCase)FindByStoryIds(ctx context.Context,ids []int64) ([]*model.Comment,error){
+
+func (u *commentUseCase) FindByStoryIds(ctx context.Context, ids []int64) ([]*model.Comment, error) {
 	if len(ids) == 0 {
 		return nil, fmt.Errorf("story_id cannot be zero")
 	}
+
 	comments, err := u.commentRepository.FindByStoryIds(ctx, ids)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch comments: %w", err)
 	}
-	return comments,nil
+
+	var userIDs []int64
+	for _, comment := range comments {
+		userIDs = append(userIDs, comment.UserID)
+	}
+
+	resp, err := u.accountServiceClient.FindByIDs(ctx, &pb.FindByIDsRequest{Ids: userIDs})
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch authors: %w", err)
+	}
+
+	userMap := make(map[int64]model.Author)
+	for _, user := range resp.Accounts {
+		userMap[user.Id] = model.Author{
+			ID:         user.Id,
+			Fullname:   user.Fullname,
+			SortBio:    user.SortBio,
+			Gender:     user.Gender.String(),
+			PictureURL: user.PictureUrl,
+			Username:   user.Username,
+			Email:      user.Email,
+		}
+	}
+
+	for idx, comment := range comments {
+		if author, exists := userMap[comment.UserID]; exists {
+			comments[idx].Author = author
+		} else {
+			log.Printf("author not found for comment ID %d with UserID %d", comment.ID, comment.UserID)
+		}
+	}
+
+	return comments, nil
 }
