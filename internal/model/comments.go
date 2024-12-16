@@ -11,7 +11,7 @@ type CommentRepository interface {
 	FindById(ctx context.Context, id int64) (*Comment, error)
 	Delete(ctx context.Context, id int64) error
 	FindByStoryId(ctx context.Context, id int64) ([]*Comment, error)
-	FindByStoryIds(ctx context.Context,id []int64)([]*Comment,error)
+	FindByStoryIds(ctx context.Context, id []int64) ([]*Comment, error)
 }
 
 type CommentUseCase interface {
@@ -20,7 +20,7 @@ type CommentUseCase interface {
 	FindById(ctx context.Context, id int64) (*Comment, error)
 	Delete(ctx context.Context, id int64) error
 	FindByStoryId(ctx context.Context, id int64) ([]*Comment, error)
-	FindByStoryIds(ctx context.Context,id []int64)([]*Comment,error)
+	FindByStoryIds(ctx context.Context, id []int64) ([]*Comment, error)
 }
 
 type Comment struct {
@@ -28,7 +28,7 @@ type Comment struct {
 	Comment   string     `json:"comment" validate:"required"`
 	StoryID   int64      `json:"story_id,omitempty" validate:"required" `
 	UserID    int64      `json:"user_id,omitempty" validate:"required" `
-	Author    Author     `json:"author"`
+	Author    Author     `json:"-"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at"`
 }

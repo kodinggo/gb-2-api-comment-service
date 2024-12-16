@@ -89,6 +89,7 @@ func (s *commentRepository) Update(ctx context.Context, id int64, data *model.Co
 	results := model.Comment{ID: data.ID, Comment: data.Comment, StoryID: data.StoryID, UserID: data.UserID}
 	return &results, nil
 }
+
 func (s *commentRepository) FindByStoryId(ctx context.Context, id int64) ([]*model.Comment, error) {
 	query, args, err := sq.Select("id,story_id,user_id,comment,created_at,updated_at").From("comments").Where(sq.Eq{"story_id": id}).OrderBy("created_at DESC").ToSql()
 	if err != nil {
@@ -102,7 +103,7 @@ func (s *commentRepository) FindByStoryId(ctx context.Context, id int64) ([]*mod
 	var comments []*model.Comment
 	for rows.Next() {
 		var comment model.Comment
-		err = rows.Scan(&comment.ID, &comment.StoryID, &comment.UserID, &comment.Comment, &comment.CreatedAt,&comment.UpdatedAt)
+		err = rows.Scan(&comment.ID, &comment.StoryID, &comment.UserID, &comment.Comment, &comment.CreatedAt, &comment.UpdatedAt)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan row: %w", err)
 		}
@@ -111,31 +112,31 @@ func (s *commentRepository) FindByStoryId(ctx context.Context, id int64) ([]*mod
 		}
 		comments = append(comments, &comment)
 	}
-	return comments,nil
+	return comments, nil
 }
 
 func (s *commentRepository) FindByStoryIds(ctx context.Context, ids []int64) ([]*model.Comment, error) {
-		query, args, err := sq.Select("id,story_id,user_id,comment,created_at,updated_at").From("comments").Where(sq.Eq{"story_id": ids}).OrderBy("created_at DESC").ToSql()
-		if err != nil{
-			return  nil,err
-		}
-		rows, err := s.db.QueryContext(ctx, query, args...)
+	query, args, err := sq.Select("id,story_id,user_id,comment,created_at,updated_at").From("comments").Where(sq.Eq{"story_id": ids}).OrderBy("created_at DESC").ToSql()
+	if err != nil {
+		return nil, err
+	}
+	rows, err := s.db.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute query: %w", err)
+	}
+	defer rows.Close()
+	var comments []*model.Comment
+	for rows.Next() {
+		var comment model.Comment
+		err = rows.Scan(&comment.ID, &comment.StoryID, &comment.UserID, &comment.Comment, &comment.CreatedAt, &comment.UpdatedAt)
 		if err != nil {
-			return nil, fmt.Errorf("failed to execute query: %w", err)
+			return nil, fmt.Errorf("failed to scan row: %w", err)
 		}
-		defer rows.Close()
-		var comments []*model.Comment
-		for rows.Next() {
-			var comment model.Comment
-			err = rows.Scan(&comment.ID, &comment.StoryID, &comment.UserID, &comment.Comment, &comment.CreatedAt,&comment.UpdatedAt)
-			if err != nil {
-				return nil, fmt.Errorf("failed to scan row: %w", err)
-			}
-			if err = rows.Err(); err != nil {
-				return nil, fmt.Errorf("rows iteration error: %w", err)
-			}
-			comments = append(comments, &comment)
+		if err = rows.Err(); err != nil {
+			return nil, fmt.Errorf("rows iteration error: %w", err)
 		}
-		return comments,nil
+		comments = append(comments, &comment)
+	}
+	return comments, nil
 
 }
