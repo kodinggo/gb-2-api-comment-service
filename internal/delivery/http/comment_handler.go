@@ -21,7 +21,7 @@ var validate = validator.New()
 
 func (h CommentHandler) RegisterRoute(e *echo.Echo) {
 	g := e.Group("/v1/comment")
-	g.POST("", h.Create)
+	g.POST("/", h.Create)
 	g.PUT("/:id", h.Update)
 	g.DELETE("/:id", h.Delete)
 }

@@ -12,10 +12,11 @@ var rootCmd = &cobra.Command{
 	Short: "comment service is a service for comment features",
 }
 
-func init() {
+func initConfig() {
 	config.InitConfig()
 }
 func Execute() {
+	initConfig()
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)
 	}
