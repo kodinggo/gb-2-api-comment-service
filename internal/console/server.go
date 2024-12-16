@@ -1,6 +1,7 @@
 package console
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -15,7 +16,6 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 )
-
 var serverCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "serve is a command to run the service server",
@@ -23,7 +23,6 @@ var serverCmd = &cobra.Command{
 		dbConn := mysqldb.InitDBConn()
 		commentRepository := repository.InitCommentRepository(dbConn)
 		commentUseCase := usecase.InitCommentUsecase(commentRepository)
-
 		quitChannel := make(chan bool, 1)
 		go func() {
 			e := echo.New()
@@ -32,15 +31,13 @@ var serverCmd = &cobra.Command{
 			e.GET("/ping", func(c echo.Context) error {
 				return c.String(http.StatusOK, "pong!")
 			})
+			fmt.Println("PORT :",config.Port())
 			e.Start(":" + config.Port())
 		}()
 		go func() {
 			grpcServer := grpc.NewServer()
-
 			commentgRPCHandler := grpcHandler.InitgRPCHanlder(commentUseCase)
-
 			pb.RegisterCommentServiceServer(grpcServer, commentgRPCHandler)
-
 			httpListener, err := net.Listen("tcp", ":7778")
 			if err != nil {
 				log.Panic("create http listener %w", err)
@@ -48,12 +45,9 @@ var serverCmd = &cobra.Command{
 			log.Println("grpc server running....")
 			grpcServer.Serve(httpListener)
 		}()
-
 		<-quitChannel
 	},
 }
-
 func init() {
-
 	rootCmd.AddCommand(serverCmd)
 }
