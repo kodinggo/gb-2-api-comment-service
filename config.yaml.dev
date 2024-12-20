@@ -1,7 +1,8 @@
 env: development
 port: 8091
 mysql:
-  dbhost: localhost:3306
+  dbhost: localhost
+  dbport: 3306
   dbuser: root
   dbpass: $Wahyu123
   dbname: comments
