@@ -10,7 +10,7 @@ COPY . .
 
 RUN go build -o main .
 
-ENV PORT = 1325
+ENV PORT=1325
 
 EXPOSE 1325
 
