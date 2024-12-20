@@ -1,0 +1,4 @@
+development:
+  dialect: mysql
+  datasource: comments.db
+  dir: db/migration

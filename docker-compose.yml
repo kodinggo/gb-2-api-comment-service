@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  golang-app:
+    build:
+      context : .
+      dockerfile: Dockerfile
+    ports:
+      - "1325:1325"
+    depends_on:
+      - mysql-db
+    environment:
+      - MYSQL_DBPORT=3306
+      - MYSQL_DBHOST=mysql-db
+      - MYSQL_DBUSER=root
+      - MYSQL_DBPASS=#Wahyu123
+      - MYSQL_DBNAME=comments
+  mysql-db:
+    image: mysql:latest
+    environment:
+     - MYSQL_ROOT_PASSWORD=#Wahyu123
+     - MYSQL_DATABASE =comments 
+    ports:
+      - "3366:3306" 
+    volumes:
+      - mysql-data:/var/lib/mysql  
+volumes:
+  mysql-data:
